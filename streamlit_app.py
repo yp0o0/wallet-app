@@ -6,6 +6,8 @@ number = st.number_input("Enter the quantity of wallets, $20 each",min_value=0, 
 price_of_wallet = number*20
 
 #discount price for tiered pricing 
+list_of_wallet_prices = []
+list_of_materials = []
 
 for i in range(number):
     st.subheader("Wallet " + str(i + 1))
@@ -40,6 +42,8 @@ for i in range(number):
         else:
             st.write("small adds $0")
         
+        list_of_materials.append(size)
+        
         choice = st.selectbox("Select one material", ["leather", "nylon", "canvas"], key = "material" + str(i))
         
         if choice == "leather":
@@ -61,10 +65,20 @@ for i in range(number):
             st.write("Engraving adds $10")
             price_of_wallet += 10
 
+list_of_wallet_prices.append(price_of_wallets)
+
+price_after_discount = 0
+total_price = sum(list_of_wallets)
+if amount_of_wallet > 3 and  'leather' in list_of_materials: 
+    price_after_discount = total_price - min(list_of_wallet_prices)
+if total_price > 300:
+    price_after_discount =  0.9(total_price)
+if 'leather' and 'nylon' in list_of_materials:
+    price_after_discount = 0.85(total_price)
+ 
+st.write("Your total =", price_after_discount)
+ 
 #add cart, use dict
 
-st.write("Your total =", price_of_wallet)
-
-st.button("Purchase")
-
-
+if st.button("Purchase", key = "purchase_button"):
+        st.session_state[purchase_pressed] = True #when button pressed
